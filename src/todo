@@ -8,3 +8,7 @@ as it sees fit.
 Related to this issue is the fact that key squares are only sent when they are new and normal
 squares are sent every update. All squares should be sent, and the sound server can decide
 to use or ignore new/returning squares
+
+
+don't send control messages on every note, they should be sent once per update
+send the time delay only when it changes? or on every update? best to be on setup and then when it changes

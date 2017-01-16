@@ -25,6 +25,8 @@ GameOfLife::GameOfLife(int dimx, int dimy, float density, char* addr, int port, 
 	trans = new Transmitter(addr, port);
 	delay = del;
 
+	trans->sendSetup("Setup", worldX, worldY, delay);
+
 	// screen setup
 	initscr();
 	getmaxyx(stdscr, screenY, screenX);
@@ -257,43 +259,38 @@ void GameOfLife::randInit(float density){
 }
 
 
-// each note will be the duration of one cycle
-/*
-	TODO
-	actually we should let the synth decide the note duration.
-	That field should be reused to say if the note is new or not.
-	Then Key squares would not be treated any differently than normal squares
-	and information about sound would be decided by the sound server.
-
-*/
 void GameOfLife::sendNotes(){
 	bool key;
+	bool newLife;
 	for(int i = 0; i < worldX; i++){
 		for(int j = 0; j < worldX; j++){
 			if(world[i][j]){
 				key = keySquares[i][j];
-				if(!key){ // non keysquares are always sent
-					trans->send("life", worldY-j, delay*1000, ctrl1(i), ctrl2(j), ctrl3());
-				}else if(world[i][j] != oldWorld[i][j]){ //keysquares are only sent if they are new
-					trans->send("key", worldY-j, delay*10000, ctrl1(i), ctrl2(j), ctrl3());
-				}
+				newLife = (world[i][j] != oldWorld[i][j]);
+				trans->sendLife("life", newLife, key, i, j);
 			}
 		}
 	}
 }
 
-float GameOfLife::ctrl1(int i){
-	return ((float) i)/((float) worldX);
+void GameOfLife::sendControl(){
+	trans->sendControl("ctl", ctrl1(), ctrl2(), ctrl3());
 }
 
-float GameOfLife::ctrl2(int j){
-	return ((float) j)/((float) worldY);
+//population
+float GameOfLife::ctrl1(){
+	return (float)population;
 }
 
+//TODO
+float GameOfLife::ctrl2(){
+	return 0;
+}
+
+//TODO
 float GameOfLife::ctrl3(){
-	return ((float)population)/((float)(worldX*worldY)/2);
+	return 0;
 }
-
 
 float GameOfLife::handleInput(){
 	int key = getch();
@@ -418,6 +415,7 @@ float GameOfLife::handleInput(){
 	if(key == 83){
 		//S
 		delay *= .9;
+		trans->sendDelay("delay", delay);
 		return delay;
 	}
 
@@ -425,6 +423,7 @@ float GameOfLife::handleInput(){
 	if(key == 115){
 		//s
 		delay *= 1.1;
+		trans->sendDelay("delay", delay);
 		return delay;
 	}
 
@@ -508,8 +507,9 @@ float GameOfLife::run(bool up){
 	}
 	action = handleInput();
 	draw();
-	if(up){ // do I want to send notes even when there's no update?
+	if(up){
 		sendNotes();
+		sendControl();
 	}
 	if(action == -2) endwin();
 	return action;

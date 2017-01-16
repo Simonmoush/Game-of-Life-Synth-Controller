@@ -1,7 +1,7 @@
 #include <cstdlib>
 #include <iostream>
 #include "life.h"
-#include "transmitter.h"
+//#include "transmitter.h"
 #include <unistd.h>
 
 char* addr = NULL;
@@ -48,10 +48,6 @@ void parseArgs(int argc, char* argv[]){
 
 int main(int argc, char* argv[]){
 	parseArgs(argc, argv);
-	Transmitter* t = new Transmitter(addr, port);
-	t->send("dimx", dimy, 0, 0.0, 0.0, 0.0); // send the domain
-	t->send("dimy", dimy, 0, 0.0, 0.0, 0.0); // send the range
-	delete t;
 	GameOfLife* L = new GameOfLife(dimx, dimy, density, addr, port, delay);
 	L->showControls();
 	bool loop = true;

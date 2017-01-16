@@ -60,8 +60,9 @@ class GameOfLife{
 	void draw();
 	void randInit(float density);
 	void sendNotes();
-	float ctrl1(int i);
-	float ctrl2(int j);
+	void sendControl();
+	float ctrl1();
+	float ctrl2();
 	float ctrl3();
 	float handleInput();
 	void put(int i, int j, bool value);

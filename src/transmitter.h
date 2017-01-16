@@ -18,6 +18,9 @@ class Transmitter{
 
 	public:
 	Transmitter(char* a, int p);
-	void send(const char* tag, int pitch, int duration, float ctrl1, float ctrl2, float ctrl3);
+	void sendLife(const char* tag, bool newLife, bool keysquare, int x, int y);
+	void sendSetup(const char* tag, int x, int y, float delay);
+	void sendControl(const char* tag, float ctl1, float ctl2, float ctl3);
+	void sendDelay(const char* tag, float delay);
 };
 #endif
