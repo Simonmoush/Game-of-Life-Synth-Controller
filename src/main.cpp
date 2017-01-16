@@ -1,7 +1,6 @@
 #include <cstdlib>
 #include <iostream>
 #include "life.h"
-//#include "transmitter.h"
 #include <unistd.h>
 
 char* addr = NULL;
