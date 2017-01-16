@@ -49,8 +49,8 @@ void parseArgs(int argc, char* argv[]){
 int main(int argc, char* argv[]){
 	parseArgs(argc, argv);
 	Transmitter* t = new Transmitter(addr, port);
-	t->send("setup", dimy, 0, 0.0, 0.0, 0.0); // scale notes to fixed range
-	t->send("setup", dimy, 0, 0.0, 0.0, 0.0); // scale notes to fixed range
+	t->send("dimx", dimy, 0, 0.0, 0.0, 0.0); // send the domain
+	t->send("dimy", dimy, 0, 0.0, 0.0, 0.0); // send the range
 	delete t;
 	GameOfLife* L = new GameOfLife(dimx, dimy, density, addr, port, delay);
 	L->showControls();

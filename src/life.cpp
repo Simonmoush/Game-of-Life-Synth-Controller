@@ -258,6 +258,14 @@ void GameOfLife::randInit(float density){
 
 
 // each note will be the duration of one cycle
+/*
+	TODO
+	actually we should let the synth decide the note duration.
+	That field should be reused to say if the note is new or not.
+	Then Key squares would not be treated any differently than normal squares
+	and information about sound would be decided by the sound server.
+
+*/
 void GameOfLife::sendNotes(){
 	bool key;
 	for(int i = 0; i < worldX; i++){
